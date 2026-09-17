@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สไลด์นำเสนอ: ระบบโชว์รูมซื้อ-ขายรถยนต์ออนไลน์ (AutoLuxe Motors)</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #131b2e;
+      --primary: #2563eb;
+      --accent: #f59e0b;
+      --cyan: #06b6d4;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Prompt', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Slides Container */
+    .slide-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1100px;
+      min-height: 600px;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 3.5rem;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+      animation: fadeIn 0.4s ease;
+      position: relative;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .slide-tag {
+      display: inline-block;
+      align-self: flex-start;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: var(--accent);
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+    }
+
+    .slide h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      font-family: 'Outfit', 'Prompt', sans-serif;
+    }
+
+    .slide h2 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .slide p {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #fff 40%, var(--cyan) 80%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Grid Layouts inside slides */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .feature-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .feature-box i {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-box h4 {
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .feature-box p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* Navigation Bar at Bottom */
+    .controls {
+      background: #070b14;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-nav {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      padding: 0.6rem 1.4rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .btn-nav:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .slide-counter {
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: 'Outfit';
+    }
+
+    .table-list {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .table-list th, .table-list td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    .table-list th {
+      color: var(--accent);
+      text-transform: uppercase;
+      font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slide-wrapper">
+    
+    <!-- SLIDE 1: Title -->
+    <div class="slide active">
+      <span class="slide-tag"><i class="fas fa-graduation-cap"></i> ข้อสอบบูรณาการ 2 วิชา</span>
+      <h1>AUTOLUXE <span class="gradient-text">MOTORS</span></h1>
+      <h3 style="font-size: 1.5rem; color: #fff; font-weight: 600; margin-bottom: 1rem;">
+        ระบบโชว์รูมซื้อ-ขายรถยนต์ออนไลน์ (Car Showroom E-Commerce System)
+      </h3>
+      <p style="max-width: 750px; margin-bottom: 2rem;">
+        โครงงานสอบบูรณาการระหว่าง <strong>วิชาโปรแกรมกราฟฟิกสำหรับการออกแบบเว็บไซต์</strong> และ <strong>วิชาการพัฒนาระบบพาณิชย์อิเล็กทรอนิกส์</strong>
+      </p>
+      <div style="display: flex; gap: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem;">
+        <div>
+          <span style="font-size: 0.82rem; color: var(--muted);">ชื่อฐานข้อมูล:</span>
+          <div style="font-size: 1.1rem; color: var(--accent); font-weight: 700;">car_system_db (5 Relations)</div>
+        </div>
+        <div>
+          <span style="font-size: 0.82rem; color: var(--muted);">เครื่องมือที่ใช้:</span>
+          <div style="font-size: 1.1rem; color: #fff; font-weight: 700;">HTML5 / CSS3 / JavaScript / MySQL (XAMPP)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Project Overview & Objectives -->
+    <div class="slide">
+      <span class="slide-tag"><i class="fas fa-bullseye"></i> วัตถุประสงค์และการตอบโจทย์</span>
+      <h2>ภาพรวมการพัฒนาตามเกณฑ์ 2 วิชา</h2>
+      <div class="grid-2">
+        <div class="feature-box">
+          <i class="fas fa-palette" style="color: var(--cyan);"></i>
+          <h4>1. วิชาโปรแกรมกราฟฟิกเว็บไซต์ (UI/UX)</h4>
+          <p>
+            • ออกแบบธีม <strong>Luxury Dark</strong> สร้างภาพลักษณ์โชว์รูมรถยนต์หรู น่าเชื่อถือ<br>
+            • จัดวางองค์ประกอบแบบ <strong>Responsive Design</strong> ดูได้ทั้งบนคอมฯ และมือถือ<br>
+            • Hero Banner พร้อมปุ่ม Call-to-Action และการ์ดแสดงสเปกรถยนต์ที่คมชัด
+          </p>
+        </div>
+        <div class="feature-box">
+          <i class="fas fa-cart-shopping" style="color: var(--accent);"></i>
+          <h4>2. วิชาพัฒนาระบบพาณิชย์อิเล็กทรอนิกส์ (E-Commerce)</h4>
+          <p>
+            • โครงสร้างฐานข้อมูลสัมพันธ์ <strong>`car_system_db`</strong> (5 Relations, PK/FK)<br>
+            • ระบบค้นหา/กรองสินค้าตามยี่ห้อและราคาแบบ Real-time<br>
+            • เครื่องคำนวณสินเชื่อเงินดาวน์และค่างวดต่อเดือน<br>
+            • ระบบสั่งจอง/ซื้อรถยนต์ออนไลน์ พร้อมสแกน QR Code และออกใบเสร็จ (E-Voucher)
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Database Architecture -->
+    <div class="slide">
+      <span class="slide-tag"><i class="fas fa-database"></i> สถาปัตยกรรมฐานข้อมูล</span>
+      <h2>โครงสร้างฐานข้อมูล car_system_db (5 ตาราง)</h2>
+      <p>ออกแบบตามข้อกำหนด Schema และ Data Dictionary ของอาจารย์ 100%:</p>
+      
+      <table class="table-list">
+        <thead>
+          <tr>
+            <th>ตาราง (Relation)</th>
+            <th>หน้าที่ในการทำงาน</th>
+            <th>Primary Key</th>
+            <th>Foreign Key / Reference</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>branch</strong></td>
+            <td>เก็บข้อมูลที่ตั้งและเวลาทำการของ 5 สาขาโชว์รูม</td>
+            <td><code>branch_id</code> (B001 - B005)</td>
+            <td>- (ตารางแม่)</td>
+          </tr>
+          <tr>
+            <td><strong>car</strong></td>
+            <td>แคตตาล็อกรถยนต์ 12 คัน (ยี่ห้อ, ราคา, สี, เครื่องยนต์, ปี)</td>
+            <td><code>car_id</code> (C001 - C012)</td>
+            <td>- (ตารางแม่)</td>
+          </tr>
+          <tr>
+            <td><strong>customer</strong></td>
+            <td>ประวัติลูกค้า 12 คน (ชื่อ, เบอร์, อาชีพ, ที่อยู่)</td>
+            <td><code>cust_id</code> (CU001 - CU012)</td>
+            <td>- (ตารางแม่)</td>
+          </tr>
+          <tr>
+            <td><strong>employee</strong></td>
+            <td>ข้อมูลพนักงานขายและผู้จัดการ 12 คน</td>
+            <td><code>emp_id</code> (E001 - E012)</td>
+            <td><code>branch_id</code> ➔ branch</td>
+          </tr>
+          <tr>
+            <td><strong style="color: var(--accent);">sale</strong></td>
+            <td>บันทึกการซื้อ-ขายรถยนต์ (วันที่, ราคา, วิธีชำระเงิน)</td>
+            <td><code>sale_id</code> (S001 - S012)</td>
+            <td><code>emp_id</code>, <code>cust_id</code>, <code>car_id</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SLIDE 4: Page to Table Mapping (ตอบข้อ 4) -->
+    <div class="slide">
+      <span class="slide-tag"><i class="fas fa-diagram-project"></i> ความเชื่อมโยง</span>
+      <h2>การเชื่อมโยงหน้าเว็บไซต์ กับ ตารางฐานข้อมูล</h2>
+      <div class="grid-3">
+        <div class="feature-box">
+          <i class="fas fa-car" style="color: var(--primary);"></i>
+          <h4>หน้าแคตตาล็อกรถยนต์</h4>
+          <p>เชื่อมกับตาราง <strong>`car`</strong> ดึงข้อมูลรหัส ยี่ห้อ ราคา สี เครื่องยนต์ และปีของรถ 12 คันมาแสดงผลและทำระบบค้นหา</p>
+        </div>
+        <div class="feature-box">
+          <i class="fas fa-shop" style="color: var(--cyan);"></i>
+          <h4>ส่วนแสดงสาขาโชว์รูม</h4>
+          <p>เชื่อมกับตาราง <strong>`branch`</strong> แสดงจุดบริการทั้ง 5 สาขา (B001-B005) พร้อมที่อยู่และเวลาทำการ</p>
+        </div>
+        <div class="feature-box">
+          <i class="fas fa-file-invoice-dollar" style="color: var(--accent);"></i>
+          <h4>ฟอร์มสั่งซื้อและจองรถ</h4>
+          <p>เชื่อมกับตาราง <strong>`customer`</strong> (รับข้อมูลลูกค้า) และตาราง <strong>`sale`</strong> (บันทึกการขายและวิธีชำระเงิน พร้อมออก E-Voucher)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Demonstration Flow -->
+    <div class="slide">
+      <span class="slide-tag"><i class="fas fa-play"></i> ลำดับการสาธิตระบบจริง</span>
+      <h2>ขั้นตอนการนำเสนอสด (Live Demonstration)</h2>
+      <div class="grid-2">
+        <div class="feature-box" style="border-left: 4px solid var(--cyan);">
+          <h4 style="color: var(--cyan);">ขั้นตอนที่ 1: หน้าร้านโชว์รูม (index.html)</h4>
+          <p>
+            1. ทดสอบ **ค้นหาและกรองยี่ห้อรถ** เช่น Tesla, BMW หรือกรองประเภทเชื้อเพลิง<br>
+            2. ทดสอบ **เครื่องคำนวณค่างวดเงินดาวน์** แบบ Real-time<br>
+            3. ทดสอบ **กดสั่งซื้อ/จองรถ** กรอกข้อมูลลูกค้า แนบสลิป และออกใบเสร็จ E-Voucher
+          </p>
+        </div>
+        <div class="feature-box" style="border-left: 4px solid var(--accent);">
+          <h4 style="color: var(--accent);">ขั้นตอนที่ 2: ระบบฐานข้อมูล (phpMyAdmin & admin.html)</h4>
+          <p>
+            1. แสดงหน้า **Designer** ใน phpMyAdmin เพื่อดูเส้นความสัมพันธ์ Foreign Key ระหว่าง 5 ตาราง<br>
+            2. แสดงหน้า **admin.html** เพื่อตรวจสอบข้อมูลตารางทั้ง 5 ตารางได้อย่างครบถ้วน
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Summary & Conclusion -->
+    <div class="slide">
+      <span class="slide-tag"><i class="fas fa-check-circle"></i> สรุปผลงาน</span>
+      <h2 style="font-size: 2.5rem;">เสร็จสมบูรณ์ 100% พร้อมส่งมอบ</h2>
+      <p style="font-size: 1.25rem; margin-bottom: 2rem;">
+        ระบบโชว์รูมซื้อ-ขายรถยนต์ออนไลน์ <strong>AutoLuxe Motors</strong> ได้รับการพัฒนาตรงตามข้อกำหนดของข้อสอบทุกประการ ทั้งด้านกราฟิกดีไซน์ โครงสร้าง E-Commerce และสถาปัตยกรรมฐานข้อมูล
+      </p>
+      <div style="background: rgba(37,99,235,0.15); border: 1px solid var(--primary); padding: 1.5rem; border-radius: 16px; text-align: center;">
+        <h3 style="color: #fff; font-size: 1.6rem; margin-bottom: 0.5rem;">ขอบคุณอาจารย์ครับ</h3>
+        <p style="color: var(--cyan); font-size: 1.1rem;">พร้อมรับฟังคำแนะนำและตอบข้อซักถามครับ (Q&A)</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="controls">
+    <button class="btn-nav" onclick="prevSlide()"><i class="fas fa-arrow-left"></i> ย้อนกลับ</button>
+    <div class="slide-counter" id="counter">สไลด์ 1 / 6</div>
+    <div style="display: flex; gap: 1rem;">
+      <a href="index.html" class="btn-nav" target="_blank" style="background: rgba(245,158,11,0.2); color: var(--accent); border-color: rgba(245,158,11,0.4);">
+        <i class="fas fa-arrow-up-right-from-square"></i> เปิดดูหน้าเว็บจริง
+      </a>
+      <button class="btn-nav" onclick="nextSlide()">ถัดไป <i class="fas fa-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('counter');
+
+    function updateSlide() {
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', idx === currentSlide);
+      });
+      counter.innerText = `สไลด์ ${currentSlide + 1} / ${slides.length}`;
+    }
+
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    // Keyboard controls (Arrow keys & Spacebar)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+  </script>
+</body>
+</html>

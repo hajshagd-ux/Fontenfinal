@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoLuxe Motors - ระบบโชว์รูมซื้อ-ขายรถยนต์ (Database: car_system_db)</title>
+  
+  <!-- Google Fonts: Prompt & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ================= Navigation Header ================= -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-icon">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <div>AUTOLUXE <span>MOTORS</span></div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#home" class="active">หน้าแรก</a></li>
+        <li><a href="#inventory">รถยนต์ในสต็อก</a></li>
+        <li><a href="#branches">สาขาโชว์รูม</a></li>
+        <li><a href="#loan-calculator">คำนวณค่างวด</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="admin.html" class="btn-admin" title="เข้าสู่ระบบจัดการข้อมูล">
+          <i class="fas fa-database"></i> ดูตารางข้อมูล (Admin)
+        </a>
+        <a href="#inventory" class="btn-primary">
+          <i class="fas fa-car"></i> เลือกรถยนต์
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= Hero Section ================= -->
+  <section class="hero-section" id="home">
+    <div class="hero-bg-glow"></div>
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="badge-tag">
+          <i class="fas fa-certificate"></i> โชว์รูมมาตรฐานพรีเมียม • ฐานข้อมูล car_system_db
+        </div>
+        <h1 class="hero-title">
+          สัมผัสสุนทรียภาพแห่ง <br>
+          <span class="gradient-text">ยนตรกรรมคุณภาพคัดเกรด</span>
+        </h1>
+        <p class="hero-subtitle">
+          ศูนย์รวมรถยนต์ชั้นนำ Toyota, Honda, BMW, Tesla, Ford, Volvo และอีกมากมาย ไมล์แท้ สภาพเยี่ยม พร้อมส่งมอบทันทีจาก 5 สาขาทั่วประเทศ
+        </p>
+
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="#inventory" class="btn-gold">
+            <i class="fas fa-magnifying-glass"></i> ดูรายการรถ 12 คัน
+          </a>
+          <a href="#loan-calculator" class="btn-primary" style="background: rgba(255,255,255,0.08); border: 1px solid var(--border-color);">
+            <i class="fas fa-calculator"></i> คำนวณสินเชื่อ / ค่างวด
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <h3>12</h3>
+            <p>รถยนต์พร้อมส่งมอบ</p>
+          </div>
+          <div class="stat-item">
+            <h3>5</h3>
+            <p>สาขาครอบคลุม</p>
+          </div>
+          <div class="stat-item">
+            <h3>100%</h3>
+            <p>รับประกันคุณภาพ</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-car-card">
+          <div style="position: relative;">
+            <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&auto=format&fit=crop&q=80" alt="Featured Car">
+            <span class="badge-featured" style="position: absolute; top: 12px; left: 12px;">
+              <i class="fas fa-star"></i> ไฮไลต์: C003
+            </span>
+          </div>
+          <div class="hero-car-info">
+            <div>
+              <span class="car-brand">BMW • 2.0L เบนซิน</span>
+              <h4>BMW 3 Series 2.0 TwinPower</h4>
+            </div>
+            <div class="hero-car-price">
+              <span>ราคาขาย (car_price)</span>
+              <strong>2,500,000 ฿</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Quick Search & Filter Bar ================= -->
+  <div class="quick-filter-wrapper">
+    <div class="filter-box">
+      <div class="filter-field">
+        <label><i class="fas fa-search"></i> ค้นหาชื่อรุ่น / ยี่ห้อ / รหัสรถ (car_id)</label>
+        <input type="text" id="search-input" placeholder="พิมพ์เช่น C001, Toyota, BMW, Tesla...">
+      </div>
+
+      <div class="filter-field">
+        <label><i class="fas fa-trademark"></i> ยี่ห้อ (car_brand)</label>
+        <select id="filter-brand">
+          <option value="all">ทุกยี่ห้อ (All Brands)</option>
+          <option value="Toyota">Toyota</option>
+          <option value="Honda">Honda</option>
+          <option value="BMW">BMW</option>
+          <option value="Nissan">Nissan</option>
+          <option value="Mazda">Mazda</option>
+          <option value="MG">MG</option>
+          <option value="Tesla">Tesla</option>
+          <option value="Ford">Ford</option>
+          <option value="Isuzu">Isuzu</option>
+          <option value="Suzuki">Suzuki</option>
+          <option value="Chevrolet">Chevrolet</option>
+          <option value="Volvo">Volvo</option>
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label><i class="fas fa-tags"></i> ช่วงราคา (car_price)</label>
+        <select id="filter-price">
+          <option value="all">ทุกช่วงราคา</option>
+          <option value="under-800k">ต่ำกว่า 800,000 บาท</option>
+          <option value="800k-1.5m">800,000 - 1,500,000 บาท</option>
+          <option value="over-1.5m">มากกว่า 1,500,000 บาทขึ้นไป</option>
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label><i class="fas fa-arrow-down-wide-short"></i> เรียงลำดับ</label>
+        <select id="sort-select">
+          <option value="recommended">ตามรหัส (C001 - C012)</option>
+          <option value="price-low">ราคา: ต่ำสุด - สูงสุด</option>
+          <option value="price-high">ราคา: สูงสุด - ต่ำสุด</option>
+          <option value="year-new">ปีโมเดลใหม่สุด</option>
+        </select>
+      </div>
+
+      <div class="filter-field" style="align-self: flex-end;">
+        <button class="btn-primary" onclick="resetFilters()" style="padding: 0.65rem 1rem;" title="ล้างตัวกรอง">
+          <i class="fas fa-rotate-left"></i> รีเซ็ต
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= Fuel Filter Chips (car_fuel_type) ================= -->
+  <div class="category-bar-section">
+    <div class="category-chips">
+      <button class="chip-btn active" data-fuel="all">
+        <i class="fas fa-border-all"></i> ทั้งหมด (All Fuels)
+      </button>
+      <button class="chip-btn" data-fuel="เบนซิน">
+        <i class="fas fa-gas-pump"></i> เบนซิน
+      </button>
+      <button class="chip-btn" data-fuel="ดีเซล">
+        <i class="fas fa-oil-can"></i> ดีเซล
+      </button>
+      <button class="chip-btn" data-fuel="ไฟฟ้า">
+        <i class="fas fa-charging-station"></i> ไฟฟ้า 100%
+      </button>
+      <button class="chip-btn" data-fuel="ไฮบริด">
+        <i class="fas fa-leaf"></i> ไฮบริด
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= Car Inventory Section (Relation: car) ================= -->
+  <section class="section-container" id="inventory">
+    <div class="section-head">
+      <div class="section-title">
+        <h2><i class="fas fa-car-rear" style="color: var(--accent-gold);"></i> รายการรถยนต์ในระบบ (Relation: car) <span id="cars-count" style="font-size: 1.1rem; color: var(--text-muted); font-weight: normal;"></span></h2>
+        <p>ข้อมูลจำเพาะ สีตัวถัง เครื่องยนต์ และราคาขายจริงตามตารางฐานข้อมูล</p>
+      </div>
+    </div>
+
+    <!-- Cars Grid Container (Rendered by js/app.js) -->
+    <div class="cars-grid" id="cars-container">
+      <!-- Loading Placeholder -->
+      <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">
+        <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i> กำลังโหลดข้อมูลรถยนต์...
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Branches Section (Relation: branch) ================= -->
+  <section class="section-container" id="branches">
+    <div class="section-head" style="text-align: center; display: block; margin-bottom: 2.5rem;">
+      <h2 style="font-size: 2rem; font-weight: 700; color: #fff;">
+        สาขาโชว์รูมที่ให้บริการ <span style="color: var(--accent-gold);">(Relation: branch)</span>
+      </h2>
+      <p>5 สาขาหลักครอบคลุมทุกภูมิภาค พร้อมเวลาทำการและศูนย์บริการ</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: var(--radius-lg);">
+        <span style="background: rgba(37,99,235,0.2); color: #60a5fa; font-weight: 700; font-size: 0.8rem; padding: 0.2rem 0.5rem; border-radius: 4px;">B001</span>
+        <h4 style="color: #fff; font-size: 1.15rem; margin: 0.6rem 0 0.35rem;">สาขารัชดา</h4>
+        <p style="color: var(--text-muted); font-size: 0.85rem;"><i class="fas fa-location-dot" style="color: var(--accent-gold);"></i> 123 ถ.รัชดาภิเษก กทม.</p>
+        <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 0.35rem;"><i class="fas fa-clock"></i> เวลาทำการ: 09:00-18:00</p>
+      </div>
+
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: var(--radius-lg);">
+        <span style="background: rgba(37,99,235,0.2); color: #60a5fa; font-weight: 700; font-size: 0.8rem; padding: 0.2rem 0.5rem; border-radius: 4px;">B002</span>
+        <h4 style="color: #fff; font-size: 1.15rem; margin: 0.6rem 0 0.35rem;">สาขาบางนา</h4>
+        <p style="color: var(--text-muted); font-size: 0.85rem;"><i class="fas fa-location-dot" style="color: var(--accent-gold);"></i> 88 ถ.บางนา-ตราด กทม.</p>
+        <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 0.35rem;"><i class="fas fa-clock"></i> เวลาทำการ: 09:00-18:00</p>
+      </div>
+
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: var(--radius-lg);">
+        <span style="background: rgba(37,99,235,0.2); color: #60a5fa; font-weight: 700; font-size: 0.8rem; padding: 0.2rem 0.5rem; border-radius: 4px;">B003</span>
+        <h4 style="color: #fff; font-size: 1.15rem; margin: 0.6rem 0 0.35rem;">สาขาเชียงใหม่</h4>
+        <p style="color: var(--text-muted); font-size: 0.85rem;"><i class="fas fa-location-dot" style="color: var(--accent-gold);"></i> 99 ถ.นิมมานเหมินท์ เชียงใหม่</p>
+        <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 0.35rem;"><i class="fas fa-clock"></i> เวลาทำการ: 09:00-17:30</p>
+      </div>
+
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: var(--radius-lg);">
+        <span style="background: rgba(37,99,235,0.2); color: #60a5fa; font-weight: 700; font-size: 0.8rem; padding: 0.2rem 0.5rem; border-radius: 4px;">B004</span>
+        <h4 style="color: #fff; font-size: 1.15rem; margin: 0.6rem 0 0.35rem;">สาขาหาดใหญ่</h4>
+        <p style="color: var(--text-muted); font-size: 0.85rem;"><i class="fas fa-location-dot" style="color: var(--accent-gold);"></i> 45 ถ.เพชรเกษม สงขลา</p>
+        <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 0.35rem;"><i class="fas fa-clock"></i> เวลาทำการ: 10:00-18:00</p>
+      </div>
+
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: var(--radius-lg);">
+        <span style="background: rgba(37,99,235,0.2); color: #60a5fa; font-weight: 700; font-size: 0.8rem; padding: 0.2rem 0.5rem; border-radius: 4px;">B005</span>
+        <h4 style="color: #fff; font-size: 1.15rem; margin: 0.6rem 0 0.35rem;">สาขานครราชสีมา</h4>
+        <p style="color: var(--text-muted); font-size: 0.85rem;"><i class="fas fa-location-dot" style="color: var(--accent-gold);"></i> 77 ถ.มิตรภาพ โคราช</p>
+        <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 0.35rem;"><i class="fas fa-clock"></i> เวลาทำการ: 09:30-18:30</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Auto Loan Calculator ================= -->
+  <section class="calc-section" id="loan-calculator">
+    <div class="section-container" style="margin-bottom: 0;">
+      <div class="calc-grid">
+        <div class="calc-inputs-col">
+          <span style="color: var(--accent-gold); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+            <i class="fas fa-coins"></i> Financing Calculator
+          </span>
+          <h2 style="font-size: 2rem; font-weight: 800; color: #fff; margin: 0.35rem 0 1.5rem;">
+            คำนวณค่างวดสินเชื่อรถยนต์
+          </h2>
+
+          <div class="calc-form-group">
+            <label>เลือกรุ่นรถยนต์ที่ต้องการคำนวณ</label>
+            <select class="calc-select" id="calc-car-select">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <div class="calc-form-group">
+            <label>
+              สัดส่วนเงินดาวน์ (%):
+              <span id="calc-down-percent">20%</span>
+            </label>
+            <input type="range" id="calc-down-range" min="10" max="50" step="5" value="20">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="calc-form-group">
+              <label>ระยะเวลาผ่อนชำระ</label>
+              <select class="calc-select" id="calc-period-select">
+                <option value="24">24 เดือน (2 ปี)</option>
+                <option value="36">36 เดือน (3 ปี)</option>
+                <option value="48">48 เดือน (4 ปี)</option>
+                <option value="60" selected>60 เดือน (5 ปี)</option>
+                <option value="72">72 เดือน (6 ปี)</option>
+                <option value="84">84 เดือน (7 ปี)</option>
+              </select>
+            </div>
+
+            <div class="calc-form-group">
+              <label>อัตราดอกเบี้ยคงที่ต่อปี (%)</label>
+              <input type="number" step="0.05" class="calc-input" id="calc-interest" value="2.59">
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-result-card">
+          <div class="result-header">ประมาณการค่างวดต่อเดือน</div>
+          <div class="result-amount" id="calc-monthly-installment">0 ฿</div>
+          
+          <div class="result-breakdown">
+            <div class="breakdown-row">
+              <span>เงินดาวน์โดยประมาณ:</span>
+              <strong id="calc-down-amount">0 ฿</strong>
+            </div>
+            <div class="breakdown-row">
+              <span>ยอดจัดไฟแนนซ์ (เงินต้น):</span>
+              <strong id="calc-loan-principle">0 ฿</strong>
+            </div>
+            <div class="breakdown-row">
+              <span>ดอกเบี้ยรวมตลอดสัญญา:</span>
+              <strong id="calc-total-interest">0 ฿</strong>
+            </div>
+          </div>
+
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1.5rem; text-align: center;">
+            * สำหรับตัวเลือกชำระแบบ "ผ่อน" ในตาราง sale (sale_payment_method)
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Footer ================= -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div class="brand-logo" style="margin-bottom: 1rem;">
+          <div class="logo-icon"><i class="fas fa-bolt"></i></div>
+          <div>AUTOLUXE <span>MOTORS</span></div>
+        </div>
+        <p>
+          ระบบโชว์รูมซื้อ-ขายรถยนต์ออนไลน์ สอดคล้องกับโครงสร้างฐานข้อมูล <code>car_system_db</code> และตอบโจทย์วิชากราฟิกเว็บไซต์และการพัฒนาระบบพาณิชย์อิเล็กทรอนิกส์
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>สาขาในระบบ (branch)</h4>
+        <ul>
+          <li><i class="fas fa-check" style="color: var(--accent-gold);"></i> B001: สาขารัชดา กทม.</li>
+          <li><i class="fas fa-check" style="color: var(--accent-gold);"></i> B002: สาขาบางนา กทม.</li>
+          <li><i class="fas fa-check" style="color: var(--accent-gold);"></i> B003: สาขาเชียงใหม่</li>
+          <li><i class="fas fa-check" style="color: var(--accent-gold);"></i> B004: สาขาหาดใหญ่</li>
+          <li><i class="fas fa-check" style="color: var(--accent-gold);"></i> B005: สาขานครราชสีมา</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>ตารางฐานข้อมูลที่เกี่ยวข้อง</h4>
+        <ul>
+          <li><code>car</code> (ข้อมูลรถยนต์ 12 คัน)</li>
+          <li><code>customer</code> (ข้อมูลลูกค้า 12 คน)</li>
+          <li><code>employee</code> (ข้อมูลพนักงาน 12 คน)</li>
+          <li><code>branch</code> (ข้อมูล 5 สาขา)</li>
+          <li><code>sale</code> (ข้อมูลการขาย 12 รายการ)</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>ข้อมูลการสอบ</h4>
+        <p style="margin-bottom: 0.4rem;">ชื่อเว็บไซต์: <strong>AutoLuxe Motors</strong></p>
+        <p style="margin-bottom: 0.4rem;">ฐานข้อมูล: <code>car_system_db</code></p>
+        <p>โฟลเดอร์: <code>C:\สอบ\Fontenfinal</code></p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>&copy; 2026 AutoLuxe Motors - Car Showroom E-Commerce System</div>
+      <div>ออกแบบและพัฒนาสำหรับข้อสอบภาคปฏิบัติ (Frontend Final)</div>
+    </div>
+  </footer>
+
+  <!-- ================= MODAL: Car Detail ================= -->
+  <div class="modal-backdrop" id="detail-modal">
+    <div class="modal-content">
+      <button class="modal-close-btn" onclick="closeModal()">
+        <i class="fas fa-xmark"></i>
+      </button>
+      <div class="modal-body" id="detail-modal-body">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: Booking & Payment (Relation: customer & sale) ================= -->
+  <div class="modal-backdrop" id="booking-modal">
+    <div class="modal-content">
+      <button class="modal-close-btn" onclick="closeModal()">
+        <i class="fas fa-xmark"></i>
+      </button>
+      <div class="modal-body">
+        <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 0.25rem;">
+          <i class="fas fa-file-contract" style="color: var(--accent-gold);"></i> ทำรายการสั่งซื้อ / จองรถยนต์ (Relation: sale & customer)
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem;">กรอกข้อมูลลูกค้าและเลือกวิธีการชำระเงินตามโครงสร้างฐานข้อมูล</p>
+
+        <!-- Selected Car Banner -->
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem; margin: 1.25rem 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <span style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 600;">รถยนต์ที่เลือก (Relation: car)</span>
+            <h4 id="booking-car-name" style="font-size: 1.15rem; color: #fff; margin: 0;">-</h4>
+          </div>
+          <div style="text-align: right;">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">ราคาขายจริง (sale_price_sold)</span>
+            <div id="booking-car-price" style="font-size: 1.25rem; font-weight: 800; color: var(--accent-gold); font-family: 'Outfit';">-</div>
+          </div>
+        </div>
+
+        <form onsubmit="submitBooking(event)">
+          <div class="form-grid">
+            <div>
+              <label class="form-label">ชื่อ-นามสกุลลูกค้า (cust_name) <span style="color: var(--danger);">*</span></label>
+              <input type="text" class="form-input" id="customer-name" placeholder="นายสมชาย ใจดี" required>
+            </div>
+            <div>
+              <label class="form-label">เบอร์โทรศัพท์ (cust_phone) <span style="color: var(--danger);">*</span></label>
+              <input type="tel" class="form-input" id="customer-phone" placeholder="0812345678" required>
+            </div>
+            <div>
+              <label class="form-label">อีเมล (cust_email) <span style="color: var(--danger);">*</span></label>
+              <input type="email" class="form-input" id="customer-email" placeholder="somchai@email.com" required>
+            </div>
+            <div>
+              <label class="form-label">วันเดือนปีเกิด (cust_dob)</label>
+              <input type="text" class="form-input" id="customer-dob" placeholder="21/3/1985">
+            </div>
+            <div>
+              <label class="form-label">อาชีพ (cust_occupation)</label>
+              <input type="text" class="form-input" id="customer-occupation" placeholder="วิศวกร / ข้าราชการ / นักธุรกิจ">
+            </div>
+            <div>
+              <label class="form-label">วิธีชำระเงิน (sale_payment_method) <span style="color: var(--danger);">*</span></label>
+              <select class="form-select" id="payment-method-select">
+                <option value="โอน">โอนเงิน (Transfer)</option>
+                <option value="เงินสด">เงินสด (Cash)</option>
+                <option value="ผ่อน">ผ่อนชำระ (Finance)</option>
+              </select>
+            </div>
+            <div class="form-full">
+              <label class="form-label">ที่อยู่ของลูกค้า (cust_address) <span style="color: var(--danger);">*</span></label>
+              <input type="text" class="form-input" id="customer-address" placeholder="123 ถ.สุขุมวิท กทม." required>
+            </div>
+            <div class="form-full">
+              <label class="form-label">สาขาโชว์รูมที่ติดต่อ (branch_id)</label>
+              <select class="form-select" id="booking-branch">
+                <!-- Populated by JS -->
+              </select>
+            </div>
+          </div>
+
+          <!-- Payment Section (QR Code & Slip Upload) -->
+          <div class="payment-card" id="payment-section">
+            <div class="qr-box">
+              <img id="qr-image" src="" alt="PromptPay QR Code">
+              <p><i class="fas fa-qrcode"></i> สแกนพร้อมเพย์</p>
+              <div style="font-size: 0.7rem; color: #475569;">บัญชี: โชว์รูม AutoLuxe</div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="font-size: 0.9rem; color: var(--text-muted);">เงินมัดจำเบื้องต้น:</span>
+                <strong id="booking-deposit-display" style="font-size: 1.35rem; color: var(--accent-gold); font-family: 'Outfit';">0 ฿</strong>
+              </div>
+
+              <label class="form-label">แนบหลักฐานการชำระเงิน / สลิปโอนเงิน</label>
+              <div class="slip-dropzone" onclick="document.getElementById('slip-input').click()">
+                <input type="file" id="slip-input" accept="image/*">
+                <i class="fas fa-cloud-arrow-up" style="font-size: 1.75rem; color: var(--primary); margin-bottom: 0.35rem;"></i>
+                <div id="slip-filename" style="font-size: 0.85rem; color: var(--text-muted);">
+                  คลิกเพื่อเลือกรูปภาพสลิป
+                </div>
+                <div class="slip-preview-container">
+                  <img id="slip-preview" src="" alt="Slip Preview">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.75rem;">
+            <button type="button" class="btn-primary" style="background: rgba(255,255,255,0.08); border: 1px solid var(--border-color);" onclick="closeModal()">
+              ยกเลิก
+            </button>
+            <button type="submit" class="btn-gold">
+              <i class="fas fa-check-circle"></i> ยืนยันคำสั่งซื้อ / บันทึกลงฐานข้อมูล
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: Voucher Confirmation ================= -->
+  <div class="modal-backdrop" id="voucher-modal">
+    <div class="modal-content">
+      <div class="modal-body" id="voucher-modal-body">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+</body>
+</html>
