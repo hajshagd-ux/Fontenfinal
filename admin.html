@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบจัดการข้อมูล (Database Relations) - AutoLuxe Motors</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="background-color: #080c18;">
+
+  <!-- ================= Admin Top Navigation ================= -->
+  <header class="admin-header">
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <a href="index.html" class="brand-logo" style="font-size: 1.25rem;">
+        <div class="logo-icon" style="width: 36px; height: 36px; font-size: 1.1rem;"><i class="fas fa-bolt"></i></div>
+        <div>AUTOLUXE <span>DATABASE VIEWER</span></div>
+      </a>
+      <span style="background: rgba(37, 99, 235, 0.2); color: #60a5fa; padding: 0.25rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">
+        <i class="fas fa-database"></i> Database: car_system_db (5 Relations)
+      </span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <button class="btn-primary" onclick="resetDemoData()" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 0.85rem; padding: 0.5rem 1rem;" title="รีเซ็ตข้อมูลเริ่มต้นตามตารางข้อสอบ">
+        <i class="fas fa-rotate-left"></i> คืนค่าตารางเริ่มต้น
+      </button>
+      <a href="index.html" class="btn-primary" style="font-size: 0.85rem; padding: 0.5rem 1.1rem;">
+        <i class="fas fa-arrow-up-right-from-square"></i> ไปหน้าแรกของเว็บไซต์
+      </a>
+    </div>
+  </header>
+
+  <!-- ================= Main Admin Content ================= -->
+  <main style="max-width: 1360px; margin: 0 auto; padding: 2rem 1.5rem;">
+    
+    <!-- Stats Overview Cards -->
+    <div class="admin-stats-grid">
+      <div class="admin-stat-card">
+        <div class="stat-icon-wrap" style="background: rgba(37,99,235,0.15); color: var(--primary);">
+          <i class="fas fa-car"></i>
+        </div>
+        <div class="admin-stat-info">
+          <span>รถยนต์ในระบบ (car)</span>
+          <strong id="stat-total-cars">12</strong>
+        </div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="stat-icon-wrap" style="background: rgba(16,185,129,0.15); color: var(--success);">
+          <i class="fas fa-file-invoice-dollar"></i>
+        </div>
+        <div class="admin-stat-info">
+          <span>รายการขาย (sale)</span>
+          <strong id="stat-total-sales">12</strong>
+        </div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="stat-icon-wrap" style="background: rgba(245,158,11,0.15); color: var(--accent-gold);">
+          <i class="fas fa-building"></i>
+        </div>
+        <div class="admin-stat-info">
+          <span>สาขาโชว์รูม (branch)</span>
+          <strong id="stat-total-branches">5</strong>
+        </div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="stat-icon-wrap" style="background: rgba(6,182,212,0.15); color: var(--accent-cyan);">
+          <i class="fas fa-money-bill-trend-up"></i>
+        </div>
+        <div class="admin-stat-info">
+          <span>ยอดขายรวมสะสม</span>
+          <strong id="stat-total-revenue">0 ฿</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Tabs for 5 Relations -->
+    <div class="admin-nav-tabs">
+      <div class="admin-nav-item active" data-tab="tab-sales">
+        <i class="fas fa-receipt"></i> 1. ตารางการขาย (sale)
+      </div>
+      <div class="admin-nav-item" data-tab="tab-cars">
+        <i class="fas fa-car-side"></i> 2. ตารางรถยนต์ (car)
+      </div>
+      <div class="admin-nav-item" data-tab="tab-customers">
+        <i class="fas fa-users"></i> 3. ตารางลูกค้า (customer)
+      </div>
+      <div class="admin-nav-item" data-tab="tab-employees">
+        <i class="fas fa-user-tie"></i> 4. ตารางพนักงาน (employee)
+      </div>
+      <div class="admin-nav-item" data-tab="tab-branches">
+        <i class="fas fa-shop"></i> 5. ตารางสาขา (branch)
+      </div>
+    </div>
+
+    <!-- TAB 1: sale -->
+    <div class="tab-content" id="tab-sales">
+      <div class="admin-table-card">
+        <h3 style="color: #fff; margin-bottom: 0.35rem;">Relation: sale (รายการการซื้อ-ขายรถยนต์)</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">ตารางหลักที่เชื่อมโยงระหว่าง employee, customer และ car</p>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>sale_id (PK)</th>
+              <th>sale_date</th>
+              <th>sale_price_sold</th>
+              <th>sale_payment_method</th>
+              <th>emp_id (FK)</th>
+              <th>cust_id (FK)</th>
+              <th>car_id (FK)</th>
+            </tr>
+          </thead>
+          <tbody id="sales-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 2: car -->
+    <div class="tab-content" id="tab-cars" style="display: none;">
+      <div class="admin-table-card">
+        <h3 style="color: #fff; margin-bottom: 0.35rem;">Relation: car (ข้อมูลรถยนต์ในระบบ)</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">ข้อมูลสเปก ราคา และปีโมเดลของรถยนต์ 12 คัน</p>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>car_id (PK)</th>
+              <th>car_brand</th>
+              <th>car_price</th>
+              <th>car_color</th>
+              <th>car_engine_size</th>
+              <th>car_fuel_type</th>
+              <th>car_year</th>
+            </tr>
+          </thead>
+          <tbody id="cars-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 3: customer -->
+    <div class="tab-content" id="tab-customers" style="display: none;">
+      <div class="admin-table-card">
+        <h3 style="color: #fff; margin-bottom: 0.35rem;">Relation: customer (ข้อมูลลูกค้า)</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">ข้อมูลประวัติ ที่อยู่ และอาชีพของลูกค้า 12 รายการ</p>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>cust_id (PK)</th>
+              <th>cust_name</th>
+              <th>cust_email</th>
+              <th>cust_phone</th>
+              <th>cust_dob</th>
+              <th>cust_occupation</th>
+              <th>cust_address</th>
+              <th>cust_register_date</th>
+            </tr>
+          </thead>
+          <tbody id="customers-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 4: employee -->
+    <div class="tab-content" id="tab-employees" style="display: none;">
+      <div class="admin-table-card">
+        <h3 style="color: #fff; margin-bottom: 0.35rem;">Relation: employee (ข้อมูลพนักงาน)</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">ข้อมูลพนักงาน ตำแหน่ง เงินเดือน และสาขาที่สังกัด</p>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>emp_id (PK)</th>
+              <th>emp_name</th>
+              <th>emp_position</th>
+              <th>emp_salary</th>
+              <th>emp_phone</th>
+              <th>emp_email</th>
+              <th>branch_id (FK)</th>
+            </tr>
+          </thead>
+          <tbody id="employees-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 5: branch -->
+    <div class="tab-content" id="tab-branches" style="display: none;">
+      <div class="admin-table-card">
+        <h3 style="color: #fff; margin-bottom: 0.35rem;">Relation: branch (ข้อมูลสาขาโชว์รูม)</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">ข้อมูลที่อยู่และเวลาทำการของโชว์รูมทั้ง 5 สาขา</p>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>branch_id (PK)</th>
+              <th>branch_name</th>
+              <th>branch_address</th>
+              <th>branch_open_hour</th>
+            </tr>
+          </thead>
+          <tbody id="branches-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/admin.js"></script>
+</body>
+</html>
